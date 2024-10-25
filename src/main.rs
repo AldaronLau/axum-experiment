@@ -1,35 +1,51 @@
-use axum::{extract::Path, routing, Router};
+use std::borrow::Cow;
 
-async fn delete(Path(path): Path<String>) -> String {
-    format!("DELETE {path}")
+use axum::{
+    body::Body, extract::Path, response::IntoResponse, routing, Router,
+};
+use http::{response::Response as HttpResponse, StatusCode};
+
+struct Response(StatusCode, Cow<'static, [u8]>);
+
+impl IntoResponse for Response {
+    fn into_response(self) -> HttpResponse<Body> {
+        let Self(status, bytes) = self;
+        let res = Body::from(bytes).into_response();
+
+        (status, res).into_response()
+    }
 }
 
-async fn get(Path(path): Path<String>) -> String {
-    format!("GET {path}")
+async fn delete(Path(path): Path<String>) -> Response {
+    Response(StatusCode::OK, format!("DELETE {path}").into_bytes().into())
 }
 
-async fn head(Path(path): Path<String>) -> String {
-    format!("HEAD {path}")
+async fn get(Path(path): Path<String>) -> Response {
+    Response(StatusCode::OK, format!("GET {path}").into_bytes().into())
 }
 
-async fn options(Path(path): Path<String>) -> String {
-    format!("OPTIONS {path}")
+async fn head(Path(path): Path<String>) -> Response {
+    Response(StatusCode::OK, format!("HEAD {path}").into_bytes().into())
 }
 
-async fn patch(Path(path): Path<String>) -> String {
-    format!("PATCH {path}")
+async fn options(Path(path): Path<String>) -> Response {
+    Response(StatusCode::OK, format!("OPTIONS {path}").into_bytes().into())
 }
 
-async fn post(Path(path): Path<String>) -> String {
-    format!("POST {path}")
+async fn patch(Path(path): Path<String>) -> Response {
+    Response(StatusCode::OK, format!("PATCH {path}").into_bytes().into())
 }
 
-async fn put(Path(path): Path<String>) -> String {
-    format!("PUT {path}")
+async fn post(Path(path): Path<String>) -> Response {
+    Response(StatusCode::OK, format!("POST {path}").into_bytes().into())
 }
 
-async fn trace(Path(path): Path<String>) -> String {
-    format!("TRACE {path}")
+async fn put(Path(path): Path<String>) -> Response {
+    Response(StatusCode::OK, format!("PUT {path}").into_bytes().into())
+}
+
+async fn trace(Path(path): Path<String>) -> Response {
+    Response(StatusCode::OK, format!("TRACE {path}").into_bytes().into())
 }
 
 #[tokio::main]

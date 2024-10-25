@@ -75,6 +75,7 @@ name = "axum-experiment"
 version = "0.0.0"
 dependencies = [
  "axum",
+ "http",
  "tokio",
 ]
 
