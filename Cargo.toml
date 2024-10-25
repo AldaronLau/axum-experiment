@@ -3,4 +3,9 @@ name = "axum-experiment"
 version = "0.1.0"
 edition = "2021"
 
-[dependencies]
+[dependencies.axum]
+version = "=0.8.0-alpha.1"
+
+[dependencies.tokio]
+version = "1.41.0"
+features = ["rt-multi-thread"]
